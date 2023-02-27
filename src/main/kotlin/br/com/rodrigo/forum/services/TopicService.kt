@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class TopicService(
-        private var topics: List<Topic> = arrayListOf(),
-        private val courseService: CourseService,
-        private val userService: UserService,
+        private var topics: List<Topic?> = arrayListOf(),
         private val mapper: TopicMapper
 ) {
     fun getAll(): List<TopicOutputDto> {
@@ -20,25 +18,14 @@ class TopicService(
 
     fun getById(id: Long): TopicOutputDto? {
         return topics
-                .filter { topic -> topic.id == id }
+                .filter { topic -> topic?.id == id }
                 .map { topic -> mapper.toOutput(topic) }
                 .firstOrNull()
     }
 
     fun create(dto: TopicInputDto) {
-        val course = courseService.getById(dto.courseId)
-        val author = userService.getById(dto.authorId)
-
-        if (author != null && course != null) {
-            val newTopic = Topic(
-                    id = topics.size + 1L,
-                    title = dto.title,
-                    message = dto.message,
-                    course = course,
-                    author = author
-            )
-
-            topics += newTopic
-        }
+        var newTopic = mapper.toTopic(dto)
+        newTopic?.id = topics.size + 1L
+        topics += newTopic
     }
 }
