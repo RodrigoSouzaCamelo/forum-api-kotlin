@@ -1,7 +1,8 @@
 package br.com.rodrigo.forum.controllers
 
-import br.com.rodrigo.forum.dtos.TopicInputDto
-import br.com.rodrigo.forum.dtos.TopicOutputDto
+import br.com.rodrigo.forum.dtos.topic.CreateTopicInputDto
+import br.com.rodrigo.forum.dtos.topic.TopicOutputDto
+import br.com.rodrigo.forum.dtos.topic.UpdateTopicInputDto
 import br.com.rodrigo.forum.services.TopicService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
@@ -21,7 +22,12 @@ class TopicController(private val service: TopicService) {
     }
 
     @PostMapping
-    fun create(@RequestBody @Valid dto: TopicInputDto) {
+    fun create(@RequestBody @Valid dto: CreateTopicInputDto) {
         service.create(dto)
+    }
+
+    @PutMapping
+    fun update(@RequestBody @Valid dto: UpdateTopicInputDto) {
+        service.update(dto)
     }
 }
