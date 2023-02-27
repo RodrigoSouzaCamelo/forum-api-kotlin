@@ -24,28 +24,29 @@ class TopicService(
                 .firstOrNull()
     }
 
-    fun create(dto: CreateTopicInputDto) {
+    fun create(dto: CreateTopicInputDto): TopicOutputDto {
         var newTopic = mapper.toTopic(dto)
         newTopic?.id = topics.size + 1L
         topics += newTopic
+        return mapper.toOutput(newTopic)
     }
 
-    fun update(dto: UpdateTopicInputDto) {
-        val topic = topics.filter { t -> t?.id == dto.id }
-        topics = topics.map { t ->
-            if (t?.id != dto.id) return@map t
+    fun update(dto: UpdateTopicInputDto): TopicOutputDto {
+        val topic = topics.first { t -> t?.id == dto.id }
+        topics -= topic
+        val updatedTopic = Topic(
+                id = dto.id,
+                title = dto.title,
+                message = dto.message,
+                status = topic!!.status,
+                author = topic.author,
+                course = topic.course,
+                answers = topic.answers,
+                createdAt = topic.createdAt
+        )
+        topics += updatedTopic
 
-            return@map Topic(
-                    id = dto.id,
-                    title = dto.title,
-                    message = dto.message,
-                    status = t.status,
-                    author = t.author,
-                    course = t.course,
-                    answers = t.answers,
-                    createdAt = t.createdAt
-            )
-        }
+        return mapper.toOutput(updatedTopic)
     }
 
     fun delete(id: Long) {
