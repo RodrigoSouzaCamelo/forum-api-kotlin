@@ -48,5 +48,8 @@ class TopicService(
         }
     }
 
-
+    fun delete(id: Long) {
+        val topic = topics.filter { t -> t?.id == id }
+        topics -= topic
+    }
 }
