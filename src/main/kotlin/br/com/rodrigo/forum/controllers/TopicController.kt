@@ -3,6 +3,7 @@ package br.com.rodrigo.forum.controllers
 import br.com.rodrigo.forum.dtos.TopicInputDto
 import br.com.rodrigo.forum.dtos.TopicOutputDto
 import br.com.rodrigo.forum.services.TopicService
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -20,7 +21,7 @@ class TopicController(private val service: TopicService) {
     }
 
     @PostMapping
-    fun create(@RequestBody dto: TopicInputDto) {
+    fun create(@RequestBody @Valid dto: TopicInputDto) {
         service.create(dto)
     }
 }
