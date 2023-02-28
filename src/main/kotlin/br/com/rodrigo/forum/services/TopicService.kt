@@ -3,6 +3,7 @@ package br.com.rodrigo.forum.services
 import br.com.rodrigo.forum.dtos.topic.CreateTopicInputDto
 import br.com.rodrigo.forum.dtos.topic.TopicOutputDto
 import br.com.rodrigo.forum.dtos.topic.UpdateTopicInputDto
+import br.com.rodrigo.forum.exceptions.NotFoundException
 import br.com.rodrigo.forum.mappers.TopicMapper
 import br.com.rodrigo.forum.models.Topic
 import org.springframework.stereotype.Service
@@ -21,7 +22,7 @@ class TopicService(
         return topics
                 .filter { topic -> topic?.id == id }
                 .map { topic -> mapper.toOutput(topic) }
-                .firstOrNull()
+                .firstOrNull() ?: throw NotFoundException("Tópico não encontrado.")
     }
 
     fun create(dto: CreateTopicInputDto): TopicOutputDto {
@@ -32,7 +33,7 @@ class TopicService(
     }
 
     fun update(dto: UpdateTopicInputDto): TopicOutputDto {
-        val topic = topics.first { t -> t?.id == dto.id }
+        val topic = topics.first { t -> t?.id == dto.id } ?: throw NotFoundException("Tópico não encontrado.")
         topics -= topic
         val updatedTopic = Topic(
                 id = dto.id,
@@ -50,7 +51,7 @@ class TopicService(
     }
 
     fun delete(id: Long) {
-        val topic = topics.filter { t -> t?.id == id }
+        val topic = topics.first { t -> t?.id == id } ?: throw NotFoundException("Tópico não encontrado.")
         topics -= topic
     }
 }

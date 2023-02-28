@@ -25,10 +25,8 @@ class TopicController(private val service: TopicService) {
     }
 
     @PostMapping
-    fun create(
-            @RequestBody @Valid dto: CreateTopicInputDto,
-            uriBuilder: UriComponentsBuilder
-    ): ResponseEntity<TopicOutputDto> {
+    fun create(@RequestBody @Valid dto: CreateTopicInputDto,
+               uriBuilder: UriComponentsBuilder): ResponseEntity<TopicOutputDto> {
         val createdTopic = service.create(dto)
         val uri = uriBuilder
                 .path("/topic/${createdTopic.id}")
