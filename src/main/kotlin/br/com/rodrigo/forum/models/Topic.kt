@@ -1,14 +1,32 @@
 package br.com.rodrigo.forum.models
 
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
+@Entity
 data class Topic(
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         var id: Long? = null,
-        val title: String,
-        val message: String,
+
+        @Column(name = "title", nullable = false)
+        val title: String? = null,
+
+        @Column(name = "message", nullable = false)
+        val message: String? = null,
+
+        @Column(name = "createdAt", nullable = false)
         val createdAt: LocalDateTime = LocalDateTime.now(),
-        val course: Course,
-        val author: User,
+
+        @Enumerated(value = EnumType.STRING)
+        @Column(name = "status", nullable = false)
         val status: TopicStatus = TopicStatus.NOT_ANSWERED,
-        val answers: List<Answers> = ArrayList()
+
+        @ManyToOne
+        val course: Course = Course(),
+
+        @ManyToOne
+        val author: User = User(),
+
+        @OneToMany(mappedBy = "topic")
+        var answers: MutableList<Answers> = mutableListOf()
 )

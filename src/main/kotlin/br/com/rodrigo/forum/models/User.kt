@@ -1,7 +1,15 @@
 package br.com.rodrigo.forum.models
 
+import jakarta.persistence.*
+
+@Entity
 data class User(
+        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
         val id: Long? = null,
-        val name: String,
-        val email: String
+
+        @Column(name = "name", nullable = false)
+        val name: String? = null,
+
+        @Column(name = "email", nullable = false)
+        val email: String? = null
 )
