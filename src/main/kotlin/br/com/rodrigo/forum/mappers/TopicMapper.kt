@@ -1,7 +1,7 @@
 package br.com.rodrigo.forum.mappers
 
-import br.com.rodrigo.forum.dtos.TopicInputDto
-import br.com.rodrigo.forum.dtos.TopicOutputDto
+import br.com.rodrigo.forum.dtos.topic.CreateTopicInputDto
+import br.com.rodrigo.forum.dtos.topic.TopicOutputDto
 import br.com.rodrigo.forum.models.Topic
 import br.com.rodrigo.forum.models.TopicStatus
 import br.com.rodrigo.forum.services.CourseService
@@ -14,7 +14,7 @@ class TopicMapper(
         private val courseService: CourseService,
         private val userService: UserService,
 ) {
-    fun toTopic(dto: TopicInputDto): Topic? {
+    fun toTopic(dto: CreateTopicInputDto): Topic? {
         val course = courseService.getById(dto.courseId)
         val author = userService.getById(dto.authorId)
 
@@ -28,7 +28,7 @@ class TopicMapper(
         )
     }
 
-    fun toTopic(topicInputs: List<TopicInputDto>): List<Topic?> {
+    fun toTopic(topicInputs: List<CreateTopicInputDto>): List<Topic?> {
         return topicInputs.map(::toTopic)
     }
 
