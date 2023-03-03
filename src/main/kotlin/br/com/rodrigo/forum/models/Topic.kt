@@ -5,28 +5,28 @@ import java.time.LocalDateTime
 
 @Entity
 data class Topic(
-        @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-        var id: Long? = null,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null,
 
-        @Column(name = "title", nullable = false)
-        val title: String? = null,
+    @Column(name = "title", nullable = false)
+    var title: String? = null,
 
-        @Column(name = "message", nullable = false)
-        val message: String? = null,
+    @Column(name = "message", nullable = false)
+    var message: String? = null,
 
-        @Column(name = "createdAt", nullable = false)
-        val createdAt: LocalDateTime = LocalDateTime.now(),
+    @Column(name = "createdAt", nullable = false)
+    val createdAt: LocalDateTime = LocalDateTime.now(),
 
-        @Enumerated(value = EnumType.STRING)
-        @Column(name = "status", nullable = false)
-        val status: TopicStatus = TopicStatus.NOT_ANSWERED,
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    val status: TopicStatus = TopicStatus.NOT_ANSWERED,
 
-        @ManyToOne
-        val course: Course = Course(),
+    @ManyToOne
+    val course: Course = Course(),
 
-        @ManyToOne
-        val author: User = User(),
+    @ManyToOne
+    val author: User = User(),
 
-        @OneToMany(mappedBy = "topic")
-        var answers: MutableList<Answers> = mutableListOf()
+    @OneToMany(mappedBy = "topic")
+    var answers: MutableList<Answers> = mutableListOf()
 )
