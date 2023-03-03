@@ -4,6 +4,7 @@ import br.com.rodrigo.forum.dtos.topic.CreateTopicInputDto
 import br.com.rodrigo.forum.dtos.topic.TopicOutputDto
 import br.com.rodrigo.forum.dtos.topic.UpdateTopicInputDto
 import br.com.rodrigo.forum.services.TopicService
+import jakarta.transaction.Transactional
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -25,6 +26,7 @@ class TopicController(private val service: TopicService) {
     }
 
     @PostMapping
+    @Transactional
     fun create(@RequestBody @Valid dto: CreateTopicInputDto,
                uriBuilder: UriComponentsBuilder): ResponseEntity<TopicOutputDto> {
         val createdTopic = service.create(dto)
@@ -37,12 +39,14 @@ class TopicController(private val service: TopicService) {
     }
 
     @PutMapping
+    @Transactional
     fun update(@RequestBody @Valid dto: UpdateTopicInputDto): ResponseEntity<TopicOutputDto> {
         val updatedTopic = service.update(dto)
         return ResponseEntity.ok(updatedTopic)
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {
         service.delete(id)
