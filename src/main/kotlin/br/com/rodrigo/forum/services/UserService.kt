@@ -1,21 +1,12 @@
 package br.com.rodrigo.forum.services
 
 import br.com.rodrigo.forum.models.User
+import br.com.rodrigo.forum.repositories.IUserRepository
 import org.springframework.stereotype.Service
 
 @Service
-class UserService(var authors: List<User>) {
-    init {
-        val author = User(
-                id = 1,
-                name = "Angus Young",
-                email = "angus.young@email.com"
-        )
-
-        authors = listOf(author)
-    }
-
+class UserService(private val repository: IUserRepository) {
     fun getById(id: Long): User? {
-        return authors.find { it.id == id }
+        return repository.getReferenceById(id)
     }
 }
