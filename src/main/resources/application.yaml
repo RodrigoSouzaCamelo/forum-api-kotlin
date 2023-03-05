@@ -6,3 +6,7 @@ spring:
     password:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      show-sql: true
+      format_sql: true
+      ddl-auto: create-drop
