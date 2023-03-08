@@ -12,8 +12,13 @@ class TopicService(
     private val repository: ITopicRepository,
     private val mapper: TopicMapper
 ) {
-    fun getAll(): List<TopicOutputDto> {
-        val topics = repository.findAll()
+    fun getAll(courseName: String?): List<TopicOutputDto> {
+        val topics = if(courseName != null) {
+            repository.findByCourseName(courseName)
+        } else {
+            repository.findAll()
+        }
+
         return mapper.toOutput(topics)
     }
 
