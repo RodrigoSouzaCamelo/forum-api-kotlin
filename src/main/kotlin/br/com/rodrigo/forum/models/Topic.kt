@@ -28,5 +28,5 @@ data class Topic(
     val author: User = User(),
 
     @OneToMany(mappedBy = "topic")
-    var answers: MutableList<Answers> = mutableListOf()
+    var answers: MutableList<Answer> = mutableListOf()
 )
