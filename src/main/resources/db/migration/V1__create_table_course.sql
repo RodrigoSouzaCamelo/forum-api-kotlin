@@ -1,8 +1,8 @@
 create table course(
-    id bigint not null,
+    id bigint not null auto_increment,
     name varchar(50),
     category varchar(50),
-    primary key
+    primary key(id)
 );
 
 insert into course values (1, 'Kotlin', 'Programming');
