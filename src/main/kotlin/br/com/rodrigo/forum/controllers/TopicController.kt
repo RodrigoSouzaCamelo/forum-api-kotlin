@@ -6,6 +6,8 @@ import br.com.rodrigo.forum.dtos.topic.UpdateTopicInputDto
 import br.com.rodrigo.forum.services.TopicService
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,8 +18,11 @@ import org.springframework.web.util.UriComponentsBuilder
 class TopicController(private val service: TopicService) {
 
     @GetMapping
-    fun getAll(@RequestParam(required = false) courseName: String?): List<TopicOutputDto> {
-        return service.getAll(courseName)
+    fun getAll(
+        @RequestParam(required = false) courseName: String?,
+        pagination: Pageable
+    ): Page<TopicOutputDto> {
+        return service.getAll(courseName, pagination)
     }
 
     @GetMapping("/{id}")
@@ -27,13 +32,15 @@ class TopicController(private val service: TopicService) {
 
     @PostMapping
     @Transactional
-    fun create(@RequestBody @Valid dto: CreateTopicInputDto,
-               uriBuilder: UriComponentsBuilder): ResponseEntity<TopicOutputDto> {
+    fun create(
+        @RequestBody @Valid dto: CreateTopicInputDto,
+        uriBuilder: UriComponentsBuilder
+    ): ResponseEntity<TopicOutputDto> {
         val createdTopic = service.create(dto)
         val uri = uriBuilder
-                .path("/topic/${createdTopic.id}")
-                .build()
-                .toUri()
+            .path("/topic/${createdTopic.id}")
+            .build()
+            .toUri()
 
         return ResponseEntity.created(uri).body(createdTopic)
     }
