@@ -6,6 +6,8 @@ import br.com.rodrigo.forum.dtos.topic.UpdateTopicInputDto
 import br.com.rodrigo.forum.services.TopicService
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
@@ -18,6 +20,7 @@ import org.springframework.web.util.UriComponentsBuilder
 class TopicController(private val service: TopicService) {
 
     @GetMapping
+    @Cacheable("topics")
     fun getAll(
         @RequestParam(required = false) courseName: String?,
         pagination: Pageable
@@ -32,6 +35,7 @@ class TopicController(private val service: TopicService) {
 
     @PostMapping
     @Transactional
+    @CacheEvict("topics", allEntries = true)
     fun create(
         @RequestBody @Valid dto: CreateTopicInputDto,
         uriBuilder: UriComponentsBuilder
@@ -47,6 +51,7 @@ class TopicController(private val service: TopicService) {
 
     @PutMapping
     @Transactional
+    @CacheEvict("topics", allEntries = true)
     fun update(@RequestBody @Valid dto: UpdateTopicInputDto): ResponseEntity<TopicOutputDto> {
         val updatedTopic = service.update(dto)
         return ResponseEntity.ok(updatedTopic)
@@ -54,6 +59,7 @@ class TopicController(private val service: TopicService) {
 
     @DeleteMapping("/{id}")
     @Transactional
+    @CacheEvict("topics", allEntries = true)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) {
         service.delete(id)
