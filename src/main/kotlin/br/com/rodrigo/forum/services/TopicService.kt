@@ -5,6 +5,8 @@ import br.com.rodrigo.forum.dtos.topic.TopicOutputDto
 import br.com.rodrigo.forum.dtos.topic.UpdateTopicInputDto
 import br.com.rodrigo.forum.mappers.TopicMapper
 import br.com.rodrigo.forum.repositories.ITopicRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -12,9 +14,14 @@ class TopicService(
     private val repository: ITopicRepository,
     private val mapper: TopicMapper
 ) {
-    fun getAll(): List<TopicOutputDto> {
-        val topics = repository.findAll()
-        return mapper.toOutput(topics)
+    fun getAll(courseName: String?, pagination: Pageable): Page<TopicOutputDto> {
+        val topics = if (courseName != null) {
+            repository.findByCourseName(courseName, pagination)
+        } else {
+            repository.findAll(pagination)
+        }
+
+        return topics.map { t -> mapper.toOutput(t) }
     }
 
     fun getById(id: Long): TopicOutputDto? {
